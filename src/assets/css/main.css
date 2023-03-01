@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    box-sizing: border-box;
+}
+
+input:focus, 
+select:focus,
+a:focus,
+button:focus {
+    outline: dashed 1px rgb(79, 70, 229);
+}

@@ -1,5 +1,3 @@
 <template>
-    <header>
-        header here...
-    </header>
+  <header>header here...</header>
 </template>
