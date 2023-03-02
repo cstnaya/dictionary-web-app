@@ -59,9 +59,6 @@ export default {
       }
     }
   },
-  async created() {
-    this.httpFetch()
-  },
   watch: {
     async query() {
       this.httpFetch()

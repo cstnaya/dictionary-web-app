@@ -3,10 +3,10 @@
     <form @submit.prevent="onSearch" class="relative flex w-full">
       <input
         type="text"
-        class="flex-1 rounded-xl bg-slate-100 p-3 focus:bg-slate-200 focus:ring-1"
+        class="flex-1 rounded-xl bg-slate-100 p-3 focus:bg-slate-200 focus:ring-1 dark:bg-neutral-600 dark:text-white"
         v-model="keyword"
       />
-      <button type="submit" class="absolute top-1/2 right-2 -translate-y-1/2 p-2 text-violet-800">
+      <button type="submit" class="absolute top-1/2 right-2 -translate-y-1/2 p-2 text-violet-800 dark:text-violet-400">
         <font-awesome-icon icon="fas fa-search" />
       </button>
     </form>

@@ -15,5 +15,6 @@ module.exports = {
       mono: ['monospace']
     }
   },
-  plugins: []
+  plugins: [],
+  darkMode: "class",
 }

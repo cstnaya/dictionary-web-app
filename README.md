@@ -2,6 +2,12 @@
 
 This template should help get you started developing with Vue 3 in Vite.
 
+## Target
+- [Resource](https://www.frontendmentor.io/challenges/dictionary-web-app-h5wwnyuKFL)
+- 深色模式
+  ![screenshot in dark mode](./screenshot-dark.png)
+- 明亮模式
+  ![screenshot in light mode](./screenshot.png)
 ## Tools
 
 1. Vue3
@@ -11,36 +17,78 @@ This template should help get you started developing with Vue 3 in Vite.
 5. TailwindCSS + PostCSS
 6. Storybook
 7. SCSS
-8. Pinia
-9. axios
+8. axios
 
 ## Memo
 
 ### 自製元件 - Switches
 
-原本想找網路上現成的，結果會跟 Vue3 衝突，只好自己手寫。  
+原本想找網路上現成的，結果會跟 Vue3 衝突，只好自己手寫。
+
 1. 想在自製元件上使用 `v-model` 的話，子元件必須宣告 `modelvalue` 和 `update:modelValue`
 2. 詳細看[官方文件](https://vuejs.org/guide/extras/render-function.html#v-model)
-3. 大家製作 Switch 的方式通常是用 `button` 包著一個 `input[type="checkbox"]`，按鈕上放置 `@click="$emit('update:modelValue', !modelvalue)"`
-4. [Stackoverflow 上的教學](https://stackoverflow.com/a/72029776)
+3. 大家製作 Switch 的方式通常是用 `button` 包著一個 `input[type="checkbox"]`，按鈕上放置:
+   ```javaScript
+   @click="$emit('update:modelValue', !modelvalue)"
+   ```
+4. [範例見 Stackoverflow 上的教學](https://stackoverflow.com/a/72029776)
 
 ### 使用 Tailwind
 
-透過 vite 搭建的 Vue 專案中使用 tailwind  
-安裝方式如下：[官方手冊](https://tailwindcss.com/docs/guides/vite#vue)  
-只要按照手冊教學通常都會成功
+透過 vite 搭建的 Vue 專案中使用 tailwind
+
+1. 安裝方式如下：[官方手冊](https://tailwindcss.com/docs/guides/vite#vue)
+2. 只要按照手冊教學通常都會成功
 
 ### 在 Storybook 中使用 TailwindCSS
 
-[參考連結](https://www.kantega.no/blogg/setting-up-storybook-7-with-vite-and-tailwind-css)
-1. `npx storybook init`
-2. `npm run storybook`
-3. 在目前版本中使用 vite + storybook 通常會搭建失敗，顯示錯誤
-    - 解決方式：[看此 issue](https://github.com/storybookjs/builder-vite/issues/554#issuecomment-1422544989)，在 `package.json` 中加上 `overrides`
-4. 在 .storybook/preview.js 中第一行加上 `import 'tailwindcss/tailwind.css'`
+1.  `npx storybook init`
+2.  `npm run storybook`
+3.  在目前版本中使用 vite + storybook 通常會搭建失敗，顯示錯誤
+
+    - 解決方式：[看此 issue](https://github.com/storybookjs/builder-vite/issues/554#issuecomment-1422544989)
+      ```json
+      // in package.json
+
+      "overrides": {
+        "@storybook/core-common": {
+          "glob": "7.2.3",
+          "glob-promise": "4.2.0"
+        },
+        "@storybook/builder-vite": {
+          "glob-promise": "4.2.0",
+          "glob": "7.2.3"
+        }
+      },
+      ```
+
+4.  在 .storybook/preview.js 中第一行加上
+    ```javascript
+    import 'tailwindcss/tailwind.css'
+    ```
+5.  [參考連結](https://www.kantega.no/blogg/setting-up-storybook-7-with-vite-and-tailwind-css)
 
 ### 深色模式
-[參考連結](https://tailwindcss.com/docs/dark-mode)
+
+- [參考連結](https://tailwindcss.com/docs/dark-mode)
+- [參考連結2](https://hsuchihting.github.io/TailwindCSS/20210908/2562966958/)
+- [參考連結3](https://codepen.io/adhuham/pen/BaNroxd?editors=0110)
+    ```javascript
+    if (localStorage.theme === 'dark') {
+      document.documentElement.classList.add('dark')
+      this.darkMode = true
+    }
+
+    dark(newValue) {
+      if (newValue) {
+        localStorage.theme = 'dark'
+        document.documentElement.classList.add('dark')
+      } else {
+        localStorage.removeItem('theme')
+        document.documentElement.classList.remove('dark')
+      }
+    }
+    ```
 
 ### 帶有中央線的 H1
 
@@ -58,6 +106,14 @@ This template should help get you started developing with Vue 3 in Vite.
 2. 但之後再搜尋的話，因為此元件已經建立了，所以不會再呼叫 created()，也就不會再發送請求
 3. 加上 `watch()`，追蹤網址後方帶的參數是否改變，如果改了就再請求
 4. (todo: 也許不需要 `created()`)
+
+### Play Audio
+```javascript
+const audio = new Audio('audio-url')
+audio.play()
+```
+
+---
 
 ## Recommended IDE Setup
 

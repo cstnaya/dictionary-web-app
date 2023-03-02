@@ -2,17 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    @apply dark:bg-neutral-800;
+  }
+
+  input:focus,
+  select:focus,
+  a:focus,
+  button:focus {
+    @apply outline-dashed outline-2 outline-violet-500 dark:outline-violet-200;
+  }
+}
+
 * {
   box-sizing: border-box;
 }
 
 body {
   font-family: sans-serif;
-}
-
-input:focus,
-select:focus,
-a:focus,
-button:focus {
-  outline: dashed 1px rgb(79, 70, 229);
 }
