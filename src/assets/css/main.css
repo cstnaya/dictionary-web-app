@@ -3,12 +3,16 @@
 @tailwind utilities;
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
-input:focus, 
+body {
+  font-family: sans-serif;
+}
+
+input:focus,
 select:focus,
 a:focus,
 button:focus {
-    outline: dashed 1px rgb(79, 70, 229);
+  outline: dashed 1px rgb(79, 70, 229);
 }
