@@ -1,28 +1,27 @@
 <template>
   <div class="container mx-auto px-3 md:px-5">
-    <div v-if="word">
-      <!-- title -->
-      <WordTitle :word="word" :phonetic="phonetic" />
-
-      <!-- meanings -->
-      <WordMeaning v-for="(mean, idx) of meanings" :key="idx" :mean="mean" />
-
-      <!-- source -->
-      <WordSource :sources="sources" />
-    </div>
+    <Loading v-if="pending" />
+    <Word
+      v-else-if="word"
+      :word="word"
+      :phonetic="phonetic"
+      :meanings="meanings"
+      :sources="sources"
+    />
     <NoResult v-else />
   </div>
 </template>
 
 <script>
 import api from '@/utils/request.js'
-import WordTitle from '@/components/words/WordTitle.vue'
-import WordMeaning from '@/components/words/WordMeaning.vue'
-import WordSource from '@/components/words/WordSource.vue'
+import Word from '@/components/words/Word.vue'
 import NoResult from '@/components/NoResult.vue'
+import Loading from '@/components/Loading.vue'
+import { usePendingStore } from '@/stores/pending'
+import { mapActions } from 'pinia'
 
 export default {
-  components: { WordTitle, WordMeaning, WordSource, NoResult },
+  components: { Word, NoResult, Loading },
   data() {
     return {
       keyword: {}
@@ -47,17 +46,24 @@ export default {
     },
     sources() {
       return this.keyword?.sourceUrls
-    }
+    },
+    pending: () => usePendingStore().pending
   },
   methods: {
     async httpFetch() {
       try {
         const res = await api.get(`${this.query}`)
         this.keyword = res.data[0]
+        usePendingStore().finishPending()
       } catch (e) {
         this.keyword = {}
+        usePendingStore().finishPending()
       }
-    }
+    },
+    ...mapActions(usePendingStore, ['finishPending'])
+  },
+  created() {
+    this.httpFetch()
   },
   watch: {
     async query() {

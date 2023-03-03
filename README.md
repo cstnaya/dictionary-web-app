@@ -18,6 +18,16 @@ This template should help get you started developing with Vue 3 in Vite.
 6. Storybook
 7. SCSS
 8. axios
+9. pinia
+10. vitest
+
+## Features
+1. storybook 用來測試 switch 元件
+2. unit-test 使用 vitest，用來測試 pinia global store
+3. web API fetching
+4. toggle dark/light mode
+5. toggle global font family
+6. 使用 tailwind 來設定 styles
 
 ## Memo
 
@@ -28,9 +38,9 @@ This template should help get you started developing with Vue 3 in Vite.
 1. 想在自製元件上使用 `v-model` 的話，子元件必須宣告 `modelvalue` 和 `update:modelValue`
 2. 詳細看[官方文件](https://vuejs.org/guide/extras/render-function.html#v-model)
 3. 大家製作 Switch 的方式通常是用 `button` 包著一個 `input[type="checkbox"]`，按鈕上放置:
-   ```javaScript
-   @click="$emit('update:modelValue', !modelvalue)"
-   ```
+    ```javaScript
+    @click="$emit('update:modelValue', !modelvalue)"
+    ```
 4. [範例見 Stackoverflow 上的教學](https://stackoverflow.com/a/72029776)
 
 ### 使用 Tailwind
@@ -44,29 +54,33 @@ This template should help get you started developing with Vue 3 in Vite.
 
 1.  `npx storybook init`
 2.  `npm run storybook`
-3.  在目前版本中使用 vite + storybook 通常會搭建失敗，顯示錯誤
-
-    - 解決方式：[看此 issue](https://github.com/storybookjs/builder-vite/issues/554#issuecomment-1422544989)
-      ```json
-      // in package.json
-
-      "overrides": {
+3.  在目前版本中使用 vite + storybook 通常會搭建失敗，顯示錯誤， 解決方式：[看此 issue](https://github.com/storybookjs/builder-vite/issues/554#issuecomment-1422544989)
+    ```json
+    "overrides": {
         "@storybook/core-common": {
-          "glob": "7.2.3",
-          "glob-promise": "4.2.0"
+            "glob": "7.2.3",
+            "glob-promise": "4.2.0"
         },
         "@storybook/builder-vite": {
-          "glob-promise": "4.2.0",
-          "glob": "7.2.3"
+            "glob-promise": "4.2.0",
+            "glob": "7.2.3"
         }
-      },
-      ```
+    },
+    ```
 
 4.  在 .storybook/preview.js 中第一行加上
     ```javascript
     import 'tailwindcss/tailwind.css'
     ```
 5.  [參考連結](https://www.kantega.no/blogg/setting-up-storybook-7-with-vite-and-tailwind-css)
+
+### 使用 font-awesome
+- [參考方式](https://fontawesome.com/docs/web/use-with/vue/)
+    ```sh
+    npm i --save @fortawesome/fontawesome-svg-core
+    npm i --save @fortawesome/free-solid-svg-icons
+    npm i --save @fortawesome/vue-fontawesome@latest-3
+    ```
 
 ### 深色模式
 
@@ -75,18 +89,18 @@ This template should help get you started developing with Vue 3 in Vite.
 - [參考連結3](https://codepen.io/adhuham/pen/BaNroxd?editors=0110)
     ```javascript
     if (localStorage.theme === 'dark') {
-      document.documentElement.classList.add('dark')
-      this.darkMode = true
+        document.documentElement.classList.add('dark')
+        this.darkMode = true
     }
 
     dark(newValue) {
-      if (newValue) {
-        localStorage.theme = 'dark'
-        document.documentElement.classList.add('dark')
-      } else {
-        localStorage.removeItem('theme')
-        document.documentElement.classList.remove('dark')
-      }
+        if (newValue) {
+            localStorage.theme = 'dark'
+            document.documentElement.classList.add('dark')
+        } else {
+            localStorage.removeItem('theme')
+            document.documentElement.classList.remove('dark')
+        }
     }
     ```
 
@@ -108,10 +122,81 @@ This template should help get you started developing with Vue 3 in Vite.
 4. (todo: 也許不需要 `created()`)
 
 ### Play Audio
-```javascript
-const audio = new Audio('audio-url')
-audio.play()
-```
+
+- [solution](https://stackoverflow.com/a/18628124)
+    ```javascript
+    const audio = new Audio('audio-url')
+    audio.play()
+    ```
+
+### Change Global Style
+- [參考方式](https://stackoverflow.com/a/64317504)
+    ```javascript
+    document.documentElement.style.setProperty('--font-size', newFontSize)
+    ```
+
+### Pending
+1. 在呼叫 API 時啟動 pending
+    ```javascript
+    api.interceptors.request.use((config) => {
+        pend.startPending()
+        return config
+    })
+    ```
+2. 在接收到請求時關閉 pending
+
+### Code Splitting & Zip
+1. 打包出來的檔案 (index.js) 有點太大了，通常會把 .js 拆成 index.js 和 vendor.js。前者是你的主程式碼，後者是外部套件，這就是 code splitting
+2. 根據[官方文件](https://cn.vitejs.dev/guide/build.html#chunking-strategy)，除了只切出 vendor.js，還可以手動切分檔案
+3. 如果只想分 vendor.js，可以這樣寫
+    ```javascript
+    // vite.config.js
+    import { splitVendorChunkPlugin } from 'vite'
+    export default defineConfig({
+        plugins: [splitVendorChunkPlugin()],
+    })
+    ```
+4. 想手動切的話可以按照[這個手冊](https://rollupjs.org/configuration-options/#output-manualchunks)這樣寫
+    ```javascript
+    // vite.config.js    
+    export default defineConfig({
+        build: {
+            rollupOptions: {
+                output: {
+                    manualChunks: {
+                        // key => 想切出的檔名, value => 想包在裡面的套件 (Array)
+                        fontawesome: [
+                            '@fortawesome/fontawesome-svg-core',
+                            '@fortawesome/free-solid-svg-icons',
+                            '@fortawesome/vue-fontawesome'
+                        ],
+                        axios: ['axios'],
+                        vue: ['vue'],
+                        'vue-router': ['vue-router']
+                    }
+                }
+            }
+        },
+    })
+    ```
+5. 檔案切割完了，但有些檔案還是很大 (例如 font-awesome.js)，這時可以使用 gzip 把檔案壓縮 (可以縮小約 1/3 的大小)。如果要在 vite 使用 gzip 先安裝下面的套件
+    ```sh
+    npm add -D vite-plugin-compression
+    ```
+6. 在 vite.config.js 設定 gzip，設定完輸入 `npm run build` 就會自動壓縮了
+    ```javascript
+    import viteCompression from 'vite-plugin-compression'
+    export default defineConfig({
+        plugins: [
+            // ...
+            viteCompression({
+                // 限制: 512 KB 以上的檔案才要壓縮
+                threshold: 512000
+            })
+        ],
+    })
+    ```
+7. [gzip 參考教學](https://blog.csdn.net/Old_Soldier/article/details/127192862)
 
 ---
 

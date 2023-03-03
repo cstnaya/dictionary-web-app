@@ -3,8 +3,12 @@
 @tailwind utilities;
 
 @layer base {
+  * {
+    @apply box-border;
+  }
+
   body {
-    @apply dark:bg-neutral-800;
+    @apply transition duration-300 dark:bg-neutral-800;
   }
 
   input:focus,
@@ -15,10 +19,10 @@
   }
 }
 
-* {
-  box-sizing: border-box;
+:root {
+  --font-size: serif;
 }
 
 body {
-  font-family: sans-serif;
+  font-family: var(--font-size);
 }
