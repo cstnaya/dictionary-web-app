@@ -24,7 +24,9 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          if (id.includes('node_modules')) {
+          if (id.includes('fontawesome')) {
+            return 'fontawesome'
+          } else if (id.includes('node_modules')) {
             return 'vendor'
           }
         }
