@@ -24,10 +24,10 @@
 </template>
 
 <script>
-import { defineAsyncComponent } from 'vue'
+import Switches from '@/components/switches/Switches.vue'
 
 export default {
-  components: { Switches: defineAsyncComponent(() => import('@/components/switches/Switches.vue')) },
+  components: { Switches },
   data() {
     return {
       darkMode: false

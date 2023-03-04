@@ -10,14 +10,12 @@
 import api from '@/utils/request.js'
 import { usePendingStore } from '@/stores/pending'
 import { mapActions } from 'pinia'
-import { defineAsyncComponent } from 'vue'
+import Word from '@/components/words/Word.vue'
+import NoResult from '@/components/NoResult.vue'
+import Loading from '@/components/Loading.vue'
 
 export default {
-  components: {
-    Word: defineAsyncComponent(() => import('@/components/words/Word.vue')),
-    NoResult: defineAsyncComponent(() => import('@/components/NoResult.vue')),
-    Loading: defineAsyncComponent(() => import('@/components/Loading.vue'))
-  },
+  components: { Word, NoResult, Loading },
   data() {
     return {
       keyword: {}

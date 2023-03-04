@@ -11,13 +11,11 @@
 </template>
 
 <script>
-import { defineAsyncComponent } from 'vue'
+import HeaderView from '@/components/Header.vue'
+import Search from '@/components/Search.vue'
 
 export default {
-  components: {
-    HeaderView: defineAsyncComponent(() => import('@/components/Header.vue')),
-    Search: defineAsyncComponent(() => import('@/components/Search.vue'))
-  },
+  components: { HeaderView, Search },
   data() {
     return {
       fontSize: 'serif'
