@@ -6,12 +6,7 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-    viteCompression({
-      threshold: 512000
-    })
-  ],
+  plugins: [vue(), viteCompression()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
@@ -28,17 +23,13 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          fontawesome: [
-            '@fortawesome/fontawesome-svg-core',
-            '@fortawesome/free-solid-svg-icons',
-            '@fortawesome/vue-fontawesome'
-          ],
-          axios: ['axios'],
-          vue: ['vue'],
-          'vue-router': ['vue-router']
+        manualChunks: (id) => {
+          if (id.includes('node_modules')) {
+            return 'vendor'
+          }
         }
       }
-    }
+    },
+    sourcemap: 'inline'
   }
 })

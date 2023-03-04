@@ -12,12 +12,14 @@
 </template>
 
 <script>
-import WordTitle from '@/components/words/WordTitle.vue'
-import WordMeaning from '@/components/words/WordMeaning.vue'
-import WordSource from '@/components/words/WordSource.vue'
+import { defineAsyncComponent } from 'vue'
 
 export default {
-  components: { WordTitle, WordMeaning, WordSource },
+  components: {
+    WordTitle: defineAsyncComponent(() => import('@/components/words/WordTitle.vue')),
+    WordMeaning: defineAsyncComponent(() => import('@/components/words/WordMeaning.vue')),
+    WordSource: defineAsyncComponent(() => import('@/components/words/WordSource.vue'))
+  },
   props: ['word', 'phonetic', 'meanings', 'sources']
 }
 </script>

@@ -1,27 +1,23 @@
 <template>
   <div class="container mx-auto px-3 md:px-5">
     <Loading v-if="pending" />
-    <Word
-      v-else-if="word"
-      :word="word"
-      :phonetic="phonetic"
-      :meanings="meanings"
-      :sources="sources"
-    />
+    <Word v-else-if="word" :word="word" :phonetic="phonetic" :meanings="meanings" :sources="sources" />
     <NoResult v-else />
   </div>
 </template>
 
 <script>
 import api from '@/utils/request.js'
-import Word from '@/components/words/Word.vue'
-import NoResult from '@/components/NoResult.vue'
-import Loading from '@/components/Loading.vue'
 import { usePendingStore } from '@/stores/pending'
 import { mapActions } from 'pinia'
+import { defineAsyncComponent } from 'vue'
 
 export default {
-  components: { Word, NoResult, Loading },
+  components: {
+    Word: defineAsyncComponent(() => import('@/components/words/Word.vue')),
+    NoResult: defineAsyncComponent(() => import('@/components/NoResult.vue')),
+    Loading: defineAsyncComponent(() => import('@/components/Loading.vue'))
+  },
   data() {
     return {
       keyword: {}

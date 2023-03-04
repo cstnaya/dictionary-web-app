@@ -28,6 +28,7 @@ This template should help get you started developing with Vue 3 in Vite.
 4. toggle dark/light mode
 5. toggle global font family
 6. 使用 tailwind 來設定 styles
+7. Web optimization: dynamic import + code split + gzip
 
 ## Memo
 
@@ -145,9 +146,11 @@ This template should help get you started developing with Vue 3 in Vite.
     ```
 2. 在接收到請求時關閉 pending
 
-### Code Splitting & Zip
+### Code Splitting & gzip & Dynamic Import
+#### Code Splitting
 1. 打包出來的檔案 (index.js) 有點太大了，通常會把 .js 拆成 index.js 和 vendor.js。前者是你的主程式碼，後者是外部套件，這就是 code splitting
-2. 根據[官方文件](https://cn.vitejs.dev/guide/build.html#chunking-strategy)，除了只切出 vendor.js，還可以手動切分檔案
+2. 根據[官方文件](https://cn.vitejs.
+dev/guide/build.html#chunking-strategy)，除了只切出 vendor.js，還可以手動切分檔案
 3. 如果只想分 vendor.js，可以這樣寫
     ```javascript
     // vite.config.js
@@ -170,7 +173,6 @@ This template should help get you started developing with Vue 3 in Vite.
                             '@fortawesome/free-solid-svg-icons',
                             '@fortawesome/vue-fontawesome'
                         ],
-                        axios: ['axios'],
                         vue: ['vue'],
                         'vue-router': ['vue-router']
                     }
@@ -179,11 +181,12 @@ This template should help get you started developing with Vue 3 in Vite.
         },
     })
     ```
-5. 檔案切割完了，但有些檔案還是很大 (例如 font-awesome.js)，這時可以使用 gzip 把檔案壓縮 (可以縮小約 1/3 的大小)。如果要在 vite 使用 gzip 先安裝下面的套件
+#### gzip
+1. 檔案切割完了，但有些檔案還是很大 (例如 font-awesome.js)，這時可以使用 gzip 把檔案壓縮 (可以縮小約 1/3 的大小)。如果要在 vite 使用 gzip 先安裝下面的套件
     ```sh
     npm add -D vite-plugin-compression
     ```
-6. 在 vite.config.js 設定 gzip，設定完輸入 `npm run build` 就會自動壓縮了
+2. 在 vite.config.js 設定 gzip，設定完輸入 `npm run build` 就會自動壓縮了
     ```javascript
     import viteCompression from 'vite-plugin-compression'
     export default defineConfig({
@@ -196,7 +199,25 @@ This template should help get you started developing with Vue 3 in Vite.
         ],
     })
     ```
-7. [gzip 參考教學](https://blog.csdn.net/Old_Soldier/article/details/127192862)
+3. [gzip 參考教學](https://blog.csdn.net/Old_Soldier/article/details/127192862)
+
+#### Dynamic Import
+1. 在引用元件時採用動態引入，系統打包時就會自動把元件拆分成獨立的 chunk
+2. 在 route 層級時動態引入：
+    ```javascript
+    {
+        path: '/search',
+        component: () => import('../views/SearchView.vue'),
+    }
+    ```
+3. 在 local component 內部動態引入：
+    ```javascript
+    import { defineAsyncComponent } from 'vue'
+    
+    export default {
+        components: { Switches: defineAsyncComponent(() => import('./Switches.vue')) },
+    }
+    ```
 
 ---
 

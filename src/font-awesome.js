@@ -1,7 +1,25 @@
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { fas } from '@fortawesome/free-solid-svg-icons'
+import {
+  faGlasses,
+  faMoon,
+  faSun,
+  faTruckLoading,
+  faKiwiBird,
+  faSearch,
+  faExternalLinkAlt,
+  faPlayCircle
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(fas)
+library.add(
+  faGlasses,
+  faMoon,
+  faSun,
+  faTruckLoading,
+  faKiwiBird,
+  faSearch,
+  faExternalLinkAlt,
+  faPlayCircle
+)
 
 export default FontAwesomeIcon

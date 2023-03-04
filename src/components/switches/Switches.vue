@@ -1,5 +1,5 @@
 <template>
-  <button type="button" @click="$emit('update:modelValue', !modelValue)"
+  <button type="button" aria-label="switch" @click="$emit('update:modelValue', !modelValue)"
     class="w-16 rounded-3xl border-none p-1" :class="classes">
     <input type="checkbox" :checked="modelValue" class="hidden" />
     <span class="block h-6 w-6 rounded-full bg-white transition-all"></span>
